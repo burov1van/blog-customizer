@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { StrictMode, CSSProperties } from 'react';
+import { StrictMode, CSSProperties, useState } from 'react';
 import clsx from 'clsx';
 
 import { Article } from './components/article/Article';
@@ -13,19 +13,49 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
+	const [bgColor, setBgColor] = useState(
+		defaultArticleState.backgroundColor.value
+	);
+	const [fontFamily, setFontFamily] = useState(
+		defaultArticleState.fontFamilyOption.value
+	);
+	const [fontColor, setFontColor] = useState(
+		defaultArticleState.fontColor.value
+	);
+	const [fontSize, setFontSize] = useState(
+		defaultArticleState.fontSizeOption.value
+	);
+	const [containerWidth, setContainerWidth] = useState(
+		defaultArticleState.contentWidth.value
+	);
+
+	const handleApply = (
+		newBgColor: string,
+		newFontFamily: string,
+		newFontColor: string,
+		newFontSize: string,
+		newContainerWidth: string
+	) => {
+		setBgColor(newBgColor);
+		setFontFamily(newFontFamily);
+		setFontColor(newFontColor);
+		setFontSize(newFontSize);
+		setContainerWidth(newContainerWidth);
+	};
+
 	return (
 		<main
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': defaultArticleState.fontFamilyOption.value,
-					'--font-size': defaultArticleState.fontSizeOption.value,
-					'--font-color': defaultArticleState.fontColor.value,
-					'--container-width': defaultArticleState.contentWidth.value,
-					'--bg-color': defaultArticleState.backgroundColor.value,
+					'--bg-color': bgColor,
+					'--font-family': fontFamily,
+					'--font-color': fontColor,
+					'--font-size': fontSize,
+					'--container-width': containerWidth,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm />
+			<ArticleParamsForm onApply={handleApply} />
 			<Article />
 		</main>
 	);
