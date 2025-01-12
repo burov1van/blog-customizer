@@ -53,15 +53,14 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	const [selectedFontFamily, setSelectedFontFamily] = useState(
 		fontFamilyOptions[0]
 	);
-
-	// (2) Цвет шрифта
-	const [selectedFontColor, setSelectedFontColor] = useState(fontColors[0]);
-
-	// (3) Размер шрифта (только абзацы)
+	// (2) Размер шрифта (только абзацы)
 	const [selectedTextSize, setSelectedTextSize] = useState('18px');
 	const handleSizeClick = (value: string) => {
 		setSelectedTextSize(value);
 	};
+
+	// (3) Цвет шрифта
+	const [selectedFontColor, setSelectedFontColor] = useState(fontColors[0]);
 
 	// (4) Цвет фона
 	const [selectedBgColor, setSelectedBgColor] = useState(backgroundColors[0]);
@@ -112,12 +111,7 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 					onReset={handleReset}
 					className={styles.form}>
 					<header className={styles.header}>
-						<Text
-							size={31}
-							weight={800}
-							uppercase
-							align='center'
-							family='open-sans'>
+						<Text size={31} weight={800} uppercase family='open-sans'>
 							<span className={styles.headerSpan}>Задайте параметры</span>
 						</Text>
 					</header>
@@ -129,15 +123,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 								options={fontFamilyOptions}
 								selected={selectedFontFamily}
 								onChange={(option) => setSelectedFontFamily(option)}
-							/>
-						</div>
-
-						<div>
-							<p className={styles.blockTitle}>Цвет шрифта</p>
-							<Select
-								options={fontColors}
-								selected={selectedFontColor}
-								onChange={(option) => setSelectedFontColor(option)}
 							/>
 						</div>
 
@@ -171,6 +156,15 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 							</div>
 						</div>
 
+						<div>
+							<p className={styles.blockTitle}>Цвет шрифта</p>
+							<Select
+								options={fontColors}
+								selected={selectedFontColor}
+								onChange={(option) => setSelectedFontColor(option)}
+							/>
+						</div>
+
 						<Separator />
 
 						<div>
@@ -193,8 +187,12 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 					</div>
 
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' htmlType='reset' type='clear' />
-						<Button title='Применить' htmlType='submit' type='apply' />
+						<div className={styles.buttonWrapper}>
+							<Button title='Сбросить' htmlType='reset' type='clear' />
+						</div>
+						<div className={styles.buttonWrapper}>
+							<Button title='Применить' htmlType='submit' type='apply' />
+						</div>
 					</div>
 				</form>
 			</aside>
