@@ -7,12 +7,18 @@ import { Select } from 'src/ui/select';
 import { Separator } from 'src/ui/separator';
 import { Text } from 'src/ui/text';
 
-// Импорт массивов опций
+// Импорт RadioGroup
+import { RadioGroup } from 'src/ui/radio-group';
+import type { OptionType } from 'src/constants/articleProps';
+
+// Импорт массивов опций и defaultArticleState
 import {
 	fontFamilyOptions,
 	fontColors,
 	backgroundColors,
 	contentWidthArr,
+	defaultArticleState,
+	fontSizeOptions, // <-- массив опций для размеров
 } from 'src/constants/articleProps';
 
 import styles from './ArticleParamsForm.module.scss';
@@ -28,45 +34,55 @@ type ArticleParamsFormProps = {
 };
 
 export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const asideRef = useRef<HTMLElement>(null);
 
+	// === Не вешаем обработчик, если меню закрыто ===
 	useEffect(() => {
+		if (!isMenuOpen) return;
+
 		function handleClickOutside(event: MouseEvent) {
 			if (
-				isOpen &&
 				asideRef.current &&
 				!asideRef.current.contains(event.target as Node)
 			) {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		}
+
 		document.addEventListener('mousedown', handleClickOutside);
+
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [isOpen]);
+	}, [isMenuOpen]);
 
-	const handleToggle = () => setIsOpen(!isOpen);
+	const handleToggle = () => setIsMenuOpen(!isMenuOpen);
 
 	// (1) Шрифт
 	const [selectedFontFamily, setSelectedFontFamily] = useState(
-		fontFamilyOptions[0]
+		defaultArticleState.fontFamilyOption
 	);
-	// (2) Размер шрифта (только абзацы)
-	const [selectedTextSize, setSelectedTextSize] = useState('18px');
-	const handleSizeClick = (value: string) => {
-		setSelectedTextSize(value);
-	};
+
+	// (2) Размер шрифта - теперь храним весь объект OptionType
+	const [selectedFontSize, setSelectedFontSize] = useState<OptionType>(
+		defaultArticleState.fontSizeOption
+	);
 
 	// (3) Цвет шрифта
-	const [selectedFontColor, setSelectedFontColor] = useState(fontColors[0]);
+	const [selectedFontColor, setSelectedFontColor] = useState(
+		defaultArticleState.fontColor
+	);
 
 	// (4) Цвет фона
-	const [selectedBgColor, setSelectedBgColor] = useState(backgroundColors[0]);
+	const [selectedBgColor, setSelectedBgColor] = useState(
+		defaultArticleState.backgroundColor
+	);
 
 	// (5) Ширина контента
-	const [selectedWidth, setSelectedWidth] = useState(contentWidthArr[0]);
+	const [selectedWidth, setSelectedWidth] = useState(
+		defaultArticleState.contentWidth
+	);
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -74,7 +90,7 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 			selectedBgColor.value,
 			selectedFontFamily.value,
 			selectedFontColor.value,
-			selectedTextSize,
+			selectedFontSize.value, // <-- берем .value, например '18px'
 			selectedWidth.value
 		);
 	};
@@ -82,83 +98,69 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	const handleReset = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		setSelectedFontFamily(fontFamilyOptions[0]);
-		setSelectedFontColor(fontColors[0]);
-		setSelectedTextSize('18px');
-		setSelectedBgColor(backgroundColors[0]);
-		setSelectedWidth(contentWidthArr[0]);
+		setSelectedFontFamily(defaultArticleState.fontFamilyOption);
+		setSelectedFontColor(defaultArticleState.fontColor);
+		setSelectedFontSize(defaultArticleState.fontSizeOption);
+		setSelectedBgColor(defaultArticleState.backgroundColor);
+		setSelectedWidth(defaultArticleState.contentWidth);
 
 		onApply?.(
-			backgroundColors[0].value,
-			fontFamilyOptions[0].value,
-			fontColors[0].value,
-			'18px',
-			contentWidthArr[0].value
+			defaultArticleState.backgroundColor.value,
+			defaultArticleState.fontFamilyOption.value,
+			defaultArticleState.fontColor.value,
+			defaultArticleState.fontSizeOption.value,
+			defaultArticleState.contentWidth.value
 		);
 	};
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={handleToggle} />
+			<ArrowButton isOpen={isMenuOpen} onClick={handleToggle} />
 
 			<aside
 				ref={asideRef}
 				className={clsx(styles.container, {
-					[styles.container_open]: isOpen,
+					[styles.container_open]: isMenuOpen,
 				})}>
 				<form
 					onSubmit={handleSubmit}
 					onReset={handleReset}
 					className={styles.form}>
-					<header className={styles.header}>
-						<Text size={31} weight={800} uppercase family='open-sans'>
+					{/* Заголовок формы */}
+					<div className={styles.header}>
+						<Text as='h2' size={31} weight={800} uppercase family='open-sans'>
 							<span className={styles.headerSpan}>Задайте параметры</span>
 						</Text>
-					</header>
+					</div>
 
 					<div className={styles.fields}>
+						{/* 1) ШРИФТ */}
 						<div>
-							<p className={styles.blockTitle}>Шрифт</p>
 							<Select
+								title='Шрифт'
 								options={fontFamilyOptions}
 								selected={selectedFontFamily}
 								onChange={(option) => setSelectedFontFamily(option)}
 							/>
 						</div>
 
+						{/* 2) РАЗМЕР ШРИФТА - теперь RadioGroup */}
 						<div>
-							<p className={styles.blockTitle}>Размер шрифта</p>
-							<div className={styles.sizeButtons}>
-								<button
-									type='button'
-									className={clsx(styles.sizeButton, {
-										[styles.sizeButtonActive]: selectedTextSize === '18px',
-									})}
-									onClick={() => handleSizeClick('18px')}>
-									18 PX
-								</button>
-								<button
-									type='button'
-									className={clsx(styles.sizeButton, {
-										[styles.sizeButtonActive]: selectedTextSize === '25px',
-									})}
-									onClick={() => handleSizeClick('25px')}>
-									25 PX
-								</button>
-								<button
-									type='button'
-									className={clsx(styles.sizeButton, {
-										[styles.sizeButtonActive]: selectedTextSize === '38px',
-									})}
-									onClick={() => handleSizeClick('38px')}>
-									38 PX
-								</button>
-							</div>
+							{/* Можно оставить <p className={styles.blockTitle}>Размер шрифта</p> 
+                  если хотите, но RadioGroup тоже умеет title */}
+							<RadioGroup
+								title='Размер шрифта'
+								name='fontSize'
+								options={fontSizeOptions}
+								selected={selectedFontSize}
+								onChange={(option) => setSelectedFontSize(option)}
+							/>
 						</div>
 
+						{/* 3) ЦВЕТ ШРИФТА */}
 						<div>
-							<p className={styles.blockTitle}>Цвет шрифта</p>
 							<Select
+								title='Цвет шрифта'
 								options={fontColors}
 								selected={selectedFontColor}
 								onChange={(option) => setSelectedFontColor(option)}
@@ -167,18 +169,20 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 
 						<Separator />
 
+						{/* 4) ЦВЕТ ФОНА */}
 						<div>
-							<p className={styles.blockTitle}>Цвет фона</p>
 							<Select
+								title='Цвет фона'
 								options={backgroundColors}
 								selected={selectedBgColor}
 								onChange={(option) => setSelectedBgColor(option)}
 							/>
 						</div>
 
+						{/* 5) ШИРИНА КОНТЕНТА */}
 						<div>
-							<p className={styles.blockTitle}>Ширина контента</p>
 							<Select
+								title='Ширина контента'
 								options={contentWidthArr}
 								selected={selectedWidth}
 								onChange={(option) => setSelectedWidth(option)}

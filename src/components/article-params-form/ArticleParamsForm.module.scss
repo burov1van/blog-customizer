@@ -53,45 +53,6 @@
 	text-transform: uppercase;
 }
 
-/* Контейнер для кнопок «Размер шрифта» */
-
-.sizeButtons {
-	display: flex;
-}
-
-/* Базовый класс для кнопки */
-
-.sizeButton {
-	width: 123px;
-	height: 35px;
-	padding: 5px 20px;
-	font-weight: 400;
-	font-size: 18px;
-	text-transform: uppercase;
-	background-color: #ffffff;
-	border: 1px solid #000000;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-}
-
-/* Hover для кнопки */
-
-.sizeButton:hover {
-	background-color: rgb(255 237 171 / 100%);
-}
-
-/* Состояние нажатия */
-
-.sizeButton:active {
-	background-color: #787878;
-}
-
-/* Отдельный класс для «активной» кнопки (выбранной) */
-
-.sizeButtonActive {
-	background-color: #ffc802;
-}
-
 /* Кнопки «Сбросить» и «Применить» внизу формы */
 
 .bottomContainer {
@@ -107,3 +68,36 @@
 	width: 180px;
 	height: 48px;
 }
+
+/* ========= УДАЛЁННЫЕ СТИЛИ ========== */
+
+/*
+.sizeButtons {
+	display: flex;
+}
+
+.sizeButton {
+	width: 123px;
+	height: 35px;
+	padding: 5px 20px;
+	font-weight: 400;
+	font-size: 18px;
+	text-transform: uppercase;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.sizeButton:hover {
+	background-color: rgb(255 237 171 / 100%);
+}
+
+.sizeButton:active {
+	background-color: #787878;
+}
+
+.sizeButtonActive {
+	background-color: #ffc802;
+}
+*/
