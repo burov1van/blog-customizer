@@ -7,7 +7,6 @@ import { Select } from 'src/ui/select';
 import { Separator } from 'src/ui/separator';
 import { Text } from 'src/ui/text';
 
-// Импорт RadioGroup
 import { RadioGroup } from 'src/ui/radio-group';
 import type { OptionType } from 'src/constants/articleProps';
 
@@ -18,7 +17,7 @@ import {
 	backgroundColors,
 	contentWidthArr,
 	defaultArticleState,
-	fontSizeOptions, // <-- массив опций для размеров
+	fontSizeOptions,
 } from 'src/constants/articleProps';
 
 import styles from './ArticleParamsForm.module.scss';
@@ -90,7 +89,7 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 			selectedBgColor.value,
 			selectedFontFamily.value,
 			selectedFontColor.value,
-			selectedFontSize.value, // <-- берем .value, например '18px'
+			selectedFontSize.value,
 			selectedWidth.value
 		);
 	};
@@ -126,7 +125,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 					onSubmit={handleSubmit}
 					onReset={handleReset}
 					className={styles.form}>
-					{/* Заголовок формы */}
 					<div className={styles.header}>
 						<Text as='h2' size={31} weight={800} uppercase family='open-sans'>
 							<span className={styles.headerSpan}>Задайте параметры</span>
@@ -134,7 +132,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 					</div>
 
 					<div className={styles.fields}>
-						{/* 1) ШРИФТ */}
 						<div>
 							<Select
 								title='Шрифт'
@@ -146,8 +143,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 
 						{/* 2) РАЗМЕР ШРИФТА - теперь RadioGroup */}
 						<div>
-							{/* Можно оставить <p className={styles.blockTitle}>Размер шрифта</p> 
-                  если хотите, но RadioGroup тоже умеет title */}
 							<RadioGroup
 								title='Размер шрифта'
 								name='fontSize'

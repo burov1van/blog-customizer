@@ -5,7 +5,7 @@ import { Article } from './components/article/Article';
 import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
 import { defaultArticleState } from './constants/articleProps';
 
-import styles from './styles/index.module.scss'; // или любой другой scss-файл, где лежат стили .main
+import styles from './styles/index.module.scss';
 
 export const App = () => {
 	const [bgColor, setBgColor] = useState(

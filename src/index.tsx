@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client';
 import { StrictMode } from 'react';
 
-import { App } from './App'; // <-- Импорт вашего нового файла App.tsx
+import { App } from './App';
 
-import './styles/index.scss'; // если у вас глобальные стили, оставляем этот импорт
+import './styles/index.scss';
 
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
